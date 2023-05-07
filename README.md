@@ -15,13 +15,13 @@ Once the project is imported, you can run it as a Spring Boot application.
 
 Tools and Technologies Used
 
-  Java 17
-  Spring Boot 3
-  Spring MVC
-  Spring Data JPA ( Hibernate)
-  MySQL
-  Thymeleaf
-  Eclipse STS
+Java 17
+Spring Boot 3
+Spring MVC
+Spring Data JPA ( Hibernate)
+MySQL
+Thymeleaf
+Eclipse STS
   
 Usage
 
