@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+
+<title>Home page</title>
+</head>
+<body>
+
+	
+
+
+	<nav class="navbar navbar-expand-lg navbar-dark text-light bg-dark">
+		<a class="navbar-brand" href="#">STUDENT MANAGEMENT SYSTEM</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active"><a class="nav-link" href="/">HOME
+						<span class="sr-only">(current)</span>
+				</a></li>
+				<li class="nav-item active"><a class="nav-link" href="addstudent">ADD
+						STUDENT</a></li>
+
+			</ul>
+		</div>
+				<!-- search -->
+		<div class="search-container ">
+		
+		<input onkeyup="search()" id="search-input" type="text" class="form-cntrol" placeholder="Search">
+		 
+		 <div class="search-result">
+		 
+		 </div>	 
+		 
+		</div>
+	</nav>
+
+	
+
+	<div th:if=${session.msg}>
+		<div class="alert alert-danger " role="alert" th:text="${session.msg}">
+		</div>
+	
+	</div>
+
+	<div class ="container">
+		<div class = "row">
+			<h1> List Students </h1>
+		</div>
+	</div>
+	<div class="container p-5">
+		<table class="table " border="1">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">Id</th>
+					<th scope="col">Name</th>
+					<th scope="col">Address</th>
+					<th scope="col">Email</th>
+					<th scope="col">Phone No</th>
+					<th scope="col">Country</th>
+					<th scope="col">Action</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="s : ${student}">
+					<th th:text="${s.id}">1</th>
+					<td th:text="${s.name}"></td>
+					<td th:text="${s.address}"></td>
+					<td th:text="${s.email}"></td>
+					<td th:text="${s.phno}"></td>
+					<td th:text="${s.country}"></td>
+					<td><a class="btn btn-sm btn-primary"
+						th:href="@{/edit/{id}(id=${s.id})}">Update</a> <a
+						class="btn btn-sm btn-danger"
+						th:href="@{/delete/{id}(id=${s.id})}">Delete</a></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+	<div class="container">
+
+		<p>Total Student: [[${totalItem}]]</p>
+
+		<nav aria-label="Page navigation example">
+			<ul class="pagination">
+      <li th:if="${currentPage !=0}" class="page-item"><a class="page-link" th:href="@{'/page/'+${currentPage-1}}">Previous</a></li>
+
+
+				<li th:each="i:${#numbers.sequence(1,totalPages)}"  th:classappend="${currentPage==i-1 ? 'active' : '' }"  class="page-item">
+				
+				<a class="page-link" th:href="@{'/page/'+${i-1}}">[[${i}]]</a>
+				
+				
+				</li>
+
+				<li th:if="${currentPage+1!=totalPages}" class="page-item"><a class="page-link" th:href="@{'/page/'+${currentPage+1}}">Next</a></li>
+			</ul>
+		</nav>
+	</div>
+
+
+	<script type="text/javascript">
+	const search=()=>{
+		//console.log("searching.....");
+		let query= $("#search-input").val();
+		
+		
+		if(query==''){
+			$(".search-result").hide();
+		}
+		else{
+		
+		let url =`/search/${query}`;
+		
+		fetch(url)
+			.then((response) =>{
+				return response.json();
+			
+			})
+			.then((data) =>{
+				console.log(data);
+				let text = `<div class=list-group>`;
+				
+				data.forEach((s) =>{
+				text +=`<a href='/${s.id}/student' class='list-group-item list-group-action'>${s.name}</a>`;
+	
+				});
+				text +=`</div>`;
+				$(".search-result").html(text);
+				$(".search-result").show();
+				});
+		}
+	  };
+	</script>
+
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+</body>
+</html>
